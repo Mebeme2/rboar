@@ -1,72 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AR Robot Mission</title>
-<script src="https://cdn.jsdelivr.net/npm/aframe@1.4.1/dist/aframe.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/ar.js@3.3.2/aframe/build/aframe-ar.js"></script>
-<style>
-  body { margin: 0; overflow: hidden; }
-</style>
+  <script src="https://cdn.jsdelivr.net/npm/aframe@1.4.1/dist/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ar.js@3.3.2/aframe/build/aframe-ar.js"></script>
 </head>
-<body>
-<a-scene embedded arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
-  
-  <!-- Robot marker -->
-  <a-marker preset="hiro">
-    <a-entity id="robot" position="0 0 0" rotation="0 0 0">
-      <!-- Body -->
-      <a-box width="0.5" height="0.7" depth="0.4" color="#f8f8f8"></a-box>
-      <!-- Screen -->
-      <a-box position="0 0.35 0.2" width="0.3" height="0.3" depth="0.05" color="#00ffff"></a-box>
-      <!-- Eyes -->
-      <a-box position="-0.15 0.35 0.22" width="0.08" height="0.08" depth="0.05" color="#00ffff"></a-box>
-      <a-box position="0.15 0.35 0.22" width="0.08" height="0.08" depth="0.05" color="#00ffff"></a-box>
-      <!-- Wheels -->
-      <a-cylinder position="-0.2 0.05 0.15" radius="0.08" height="0.05" rotation="90 0 0" color="#FFFF00"></a-cylinder>
-      <a-cylinder position="0.2 0.05 0.15" radius="0.08" height="0.05" rotation="90 0 0" color="#FFFF00"></a-cylinder>
-      <a-cylinder position="-0.2 0.05 -0.15" radius="0.08" height="0.05" rotation="90 0 0" color="#FFFF00"></a-cylinder>
-      <a-cylinder position="0.2 0.05 -0.15" radius="0.08" height="0.05" rotation="90 0 0" color="#FFFF00"></a-cylinder>
-    </a-entity>
-
-    <!-- Bed acting as a button -->
-    <a-box id="bed" position="1 0 0" width="0.7" height="0.4" depth="1.5" color="#8B4513"></a-box>
-  </a-marker>
-
-  <!-- Camera -->
-  <a-entity camera></a-entity>
-</a-scene>
-
-<script>
-  const robot = document.getElementById('robot');
-  const bed = document.getElementById('bed');
-  let moving = false;
-
-  bed.addEventListener('click', () => {
-    if (moving) return;
-    moving = true;
-
-    const startPos = robot.object3D.position.clone();
-    const endPos = bed.object3D.position.clone();
-    endPos.y = startPos.y; // same height
-    let start = null;
-
-    function moveRobot(timestamp) {
-      if (!start) start = timestamp;
-      const progress = (timestamp - start) / 2000; // 2 sec
-      if (progress < 1) {
-        robot.object3D.position.lerpVectors(startPos, endPos, progress);
-        requestAnimationFrame(moveRobot);
-      } else {
-        robot.object3D.position.copy(endPos);
-        alert('Mission Successful. See you again!');
-        moving = false;
-      }
-    }
-
-    requestAnimationFrame(moveRobot);
-  });
-</script>
+<body style="margin:0; overflow:hidden;">
+  <a-scene embedded
+           vr-mode-ui="enabled: false"
+           arjs="trackingMethod: best; sourceType: webcam; uiEnabled: true; debugUIEnabled: false;">
+    <a-marker preset="hiro">
+      <a-box position="0 0.25 0" color="red"></a-box>
+    </a-marker>
+    <a-entity camera></a-entity>
+  </a-scene>
 </body>
 </html>
+
